@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "ce6ea9cd-e8bd-4f26-ae97-8011ad6e5d41",
+		"name": "Library API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23766478"
+	},
+	"item": [
+		{
+			"name": "Add book",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//ID: isbn + aisle",
+							"",
+							"const code = pm.globals.get(\"companyCode\");",
+							"console.log(code);",
+							"pm.collectionVariables.set(\"isbn\",code);",
+							"const randomVal = pm.variables.replaceIn('{{$randomInt}}');",
+							"pm.collectionVariables.set(\"aisle\",randomVal);",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"   ",
+							"",
+							"pm.test(\"Validate Status Code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"    const jsonResponse = pm.response.json();",
+							"   pm.expect(jsonResponse).have.property(\"Msg\");",
+							"   pm.expect(jsonResponse.Msg).to.eq(\"successfully added\");",
+							"   pm.collectionVariables.set(\"ID\",jsonResponse.ID);",
+							"})",
+							"",
+							"pm.test(\"Header cookies response Validate\", function(){",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\"))",
+							"    .to.eql(\"application/json;charset=UTF-8\");",
+							"",
+							"    pm.expect(pm.response.responseTime).to.be.below(1200);",
+							"    pm.expect(pm.response.text()).to.include(\"successfully added\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\"name\":\"Learn Life\",\n\"isbn\":\"{{isbn}}\",\n\"aisle\":\"{{aisle}}\",\n\"author\":\"Gaurav M\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/Library/Addbook.php",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book by Author",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_Url}}/Library/GetBook.php?AuthorName=Gaurav M",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "AuthorName",
+							"value": "Gaurav M"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_Url}}/Library/GetBook.php?ID={{ID}}",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "{{ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \n\"ID\" : \"{{ID}}\"\n \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/Library/DeleteBook.php",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"Library",
+						"DeleteBook.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "isbn",
+			"value": ""
+		},
+		{
+			"key": "aisle",
+			"value": ""
+		},
+		{
+			"key": "ID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
